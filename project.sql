@@ -65,8 +65,8 @@ CREATE table if not exists cliente_transacoes (
 select * from banco;
 select * from cliente_transacoes;
 select nome from tipo_transacao;
-select nome.cliente, numero.conta_corrente_digito, digito.conta_corrente
-join conta_corrente on cliente_numero.conta_corrente = numero.cliente;
+select cliente.nome, conta_corrente.numero, conta_corrente.digito, conta_corrente.banco_numero, conta_corrente.agencia_numero
+join conta_corrente on conta_corrente.cliente_numero = cliente.numero
 
 -- Then, we are gonna input some informations in the tables that can be found at "https://github.com/drobcosta/digital_innovation_one/blob/master/dml.sql"
 -- Starting with table banco:
@@ -4491,4 +4491,16 @@ select count(numero) from cliente;
 select count(numero), email from client where email ilike '%gmail.com' group by email;
 select max(valor) from cliente_transacoes;
 select min(valor) from cliente_transacoes;
+select count(banco.numero) from banco join agencia on agencia.banco_numero = banco.numero;
+select banco.numero, banco.nome, agencia.numero, agencia.nome from banco_numero
+left join agencia on agencia.banco_numero = banco.numero;
 
+-- Let's use a VIEW:
+create or replace view vw_bancos (banco_numero, banco_nome, banco_ativo) as(
+    select nome, numero, ativo
+    from banco
+)
+insert into vw_bancos(banco_numero, banco_nome, banco_ativo) values (999, 'Unreal Bank SA', TRUE);
+select banco_numero, banco_nome, banco_ativo from vw_bancos where banco_numero = 999;
+update vw_bancos set ativo = FALSE where banco_numero = 999;
+update vw_bancos set banco_nome = "Fake Bank SA" where banco_numero = 999;
