@@ -22,6 +22,7 @@ CREATE table if not exists agencia (
 CREATE table if not exists cliente (
     numero bigserial primary key,
     nome varchar(120) not null,
+    email varchar(50) not null,
     ativo boolean not null default true,
     data_criacao timestamp not null default CURRENT_TIMESTAMP
 )
@@ -4478,3 +4479,16 @@ INSERT INTO cliente_transacoes (banco_numero,agencia_numero,conta_corrente_numer
 INSERT INTO cliente_transacoes (banco_numero,agencia_numero,conta_corrente_numero,conta_corrente_digito,cliente_numero,tipo_transacao_id,valor) VALUES (33,26,412461021,7,481,1, 210.08);
 INSERT INTO cliente_transacoes (banco_numero,agencia_numero,conta_corrente_numero,conta_corrente_digito,cliente_numero,tipo_transacao_id,valor) VALUES (1,38,14429544,3,22,1, 211.27);
 INSERT INTO cliente_transacoes (banco_numero,agencia_numero,conta_corrente_numero,conta_corrente_digito,cliente_numero,tipo_transacao_id,valor) VALUES (247,22,321020135,5,326,1, 211.66);
+
+-- Let's see some connected informations:
+select numero, nome, ativo from banco;
+select banco_numero, numero, nome from agencia;
+select banco_numero, agencia_numero, cliente_numero from cliente_transacoes;
+select * from cliente;
+select * from banco;
+select * from agencia;
+select count(numero) from cliente;
+select count(numero), email from client where email ilike '%gmail.com' group by email;
+select max(valor) from cliente_transacoes;
+select min(valor) from cliente_transacoes;
+
